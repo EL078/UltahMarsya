@@ -360,7 +360,7 @@
             if (currentSlide === 1) {
                 const nameVal = document.getElementById('nameInput').value.trim().toLowerCase();
                 if (nameVal !== 'marsya') {
-                    showError('nameInput', 'nameError', 'Eh salah! Kamu siapa hayo? 🧐 (Ketik: marsya)');
+                    showError('nameInput', 'nameError', 'Eh salah! Kamu siapa hayo? 🧐');
                     return; 
                 } else {
                     hideError('nameInput', 'nameError');
@@ -370,7 +370,7 @@
             if (currentSlide === 2) {
                 const dateVal = document.getElementById('dateInput').value;
                 if (dateVal !== '2009-10-30') {
-                    showError('dateInput', 'dateError', 'Tetoot! Salah tanggal wleee 😜 (Pilih: 30 Okt 2009)');
+                    showError('dateInput', 'dateError', 'Tetoot! Salah tanggal wleee 😜');
                     return; 
                 } else {
                     hideError('dateInput', 'dateError');
