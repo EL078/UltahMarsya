@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Marsya!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Pengaturan Dasar */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #fbcfe8; /* Pink pastel */
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container Utama */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        /* Tema Neo-Brutalism */
+        .neo-card {
+            background-color: #ffffff;
+            border: 4px solid #000000;
+            box-shadow: 8px 8px 0px 0px #000000;
+            border-radius: 16px;
+            padding: 30px 20px;
+            width: 100%;
+        }
+
+        .neo-button {
+            background-color: #f472b6; /* Pink gelap */
+            color: #ffffff;
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px 0px #000000;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Fredoka', sans-serif;
+            cursor: pointer;
+            transition: all 0.1s ease-in-out;
+        }
+
+        .neo-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #000000;
+        }
+
+        .neo-button-secondary {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .neo-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Fredoka', sans-serif;
+            text-align: center;
+            border: 3px solid #000000;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px 0px #000000;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        .neo-input:focus {
+            outline: none;
+            background-color: #fdf2f8;
+            box-shadow: 2px 2px 0px 0px #000000;
+            transform: translate(2px, 2px);
+        }
+
+        /* Animasi dan Layout Slide */
+        .slide {
+            display: none; 
+            flex-direction: column; 
+            align-items: center;
+            text-align: center;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .slide.active {
+            display: flex; 
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* Teks & Margin Manual */
+        .emoji-big { font-size: 60px; margin-bottom: 15px; }
+        .title { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+        .subtitle { color: #4b5563; margin-bottom: 25px; font-size: 16px; }
+        .error-text { color: #ef4444; font-weight: bold; font-size: 14px; display: none; margin-top: -5px; margin-bottom: 10px; }
+        .show-error { display: block; }
+        
+        .pink-text { color: #db2777; }
+        .bg-pink { background-color: #fce7f3; }
+
+        /* Animasi Error / Getar */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: #ef4444 !important;
+            background-color: #fee2e2 !important;
+        }
+
+        /* Style Polaroid untuk Galeri */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .polaroid {
+            background: #ffffff;
+            padding: 8px 8px 25px 8px;
+            border: 3px solid #000000;
+            box-shadow: 4px 4px 0px 0px #000000;
+            transform: rotate(-3deg);
+            transition: transform 0.3s;
+            cursor: pointer; /* Menambahkan kursor telunjuk */
+        }
+        .polaroid:nth-child(even) { transform: rotate(4deg); }
+        .polaroid:hover { transform: rotate(0deg) scale(1.05); z-index: 10; }
+        .polaroid img {
+            border: 2px solid #000;
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            pointer-events: none; /* Mencegah gambar mengganggu klik */
+        }
+
+        /* Navigasi Bawah */
+        .nav-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+        }
+        #nextBtn { margin-left: auto; }
+
+        /* --- STYLING UNTUK POP-UP MODAL FOTO --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none; /* Disembunyikan awalnya */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #fff;
+            border: 4px solid #000;
+            border-radius: 16px;
+            box-shadow: 8px 8px 0px 0px #000;
+            padding: 20px;
+            max-width: 350px;
+            width: 100%;
+            position: relative;
+            text-align: center;
+            animation: popIn 0.3s ease-out forwards;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background-color: #ef4444; /* Merah */
+            color: #fff;
+            border: 3px solid #000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px 0px #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px 0px #000;
+        }
+        .modal-image {
+            width: 100%;
+            border: 3px solid #000;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .modal-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container Utama -->
+    <div class="container">
+        
+        <!-- SLIDE 1: Nama -->
+        <div id="slide-1" class="slide active neo-card">
+            <div class="emoji-big">👀</div>
+            <h2 class="title">Halooo! Ada Yang Ultah Niiehh!</h2>
+            <p class="subtitle">Siapa nih nama kamu?</p>
+            
+            <input type="text" id="nameInput" placeholder="Ketik nama kamu..." class="neo-input" autocomplete="off">
+            <p id="nameError" class="error-text">Eh salah! Kamu siapa hayo? 🧐</p>
+        </div>
+
+        <!-- SLIDE 2: Tanggal Lahir -->
+        <div id="slide-2" class="slide neo-card">
+            <div class="emoji-big">🎂</div>
+            <h2 class="title">Verifikasi Dulu!</h2>
+            <p class="subtitle">Coba tebak, tanggal berapa kamu lahir?</p>
+            
+            <input type="date" id="dateInput" class="neo-input">
+            <p id="dateError" class="error-text">Tetoot! Salah tanggal wleee 😜</p>
+            <p style="font-size: 12px; color: #6b7280;">*(Isi dengan tanggal ulang tahunmu)*</p>
+        </div>
+
+        <!-- SLIDE 3: Ucapan -->
+        <div id="slide-3" class="slide neo-card bg-pink">
+            <div class="emoji-big" style="animation: shake 2s infinite;">🎉</div>
+            <h1 class="title pink-text" style="font-size: 28px;">Happy Birthday,<br>MARSYA! 💖</h1>
+            <p style="font-size: 16px; line-height: 1.6; font-weight: 500;">
+                Selamat ulang tahun yang ke-17 ya! 🥳<br><br>
+                Semoga Princess kecikkk acuu panjang umur, sehat selalu, makin cantik, makin pinter, dan semua yang Princess Marsya semogakan bisa segera tercapai. Jangan lupa bahagia terus hari ini dan seterusnya! ✨
+            </p>
+            <div style="margin-top: 20px; display: flex; gap: 10px; font-size: 24px;">
+                <span>🍰</span><span>🎁</span><span>🎈</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Galeri Foto -->
+        <div id="slide-4" class="slide neo-card">
+            <h2 class="title" style="margin-bottom: 20px;">Galeri Gemas 📸</h2>
+            <div class="gallery-grid">
+                <!-- Tambahkan atribut onclick untuk membuka pop-up -->
+                <div class="polaroid" onclick="openModal('BERSAMA.jpg', 'Senang sekali akhirnya bisa menyimpan momen ini. Ini foto bersama pertama kita, langkah awal dari banyak kenangan indah lainnya.')">
+                    <img src="BERSAMA.jpg" alt="Foto Marsya 1">
+                </div>
+                
+                <div class="polaroid" onclick="openModal('MARSYA1.jpg', 'Perkenalkan, ini adalah manusia paling cantik yang selalu berhasil membuat hariku jadi lebih baik.')">
+                    <img src="MARSYA1.jpg" alt="Foto Marsya 2">
+                </div>
+                
+                <div class="polaroid" onclick="openModal('MARSYA2.jpg', 'Duniaku mendadak lebih cerah tiap lihat foto ini. Kenapa? Karena ini adalah manusia paling cantik, persis bagaikan bidadari.')">
+                    <img src="MARSYA2.jpg" alt="Foto Marsya 3">
+                </div>
+                
+                <div class="polaroid" onclick="openModal('BERSAMA2.png', 'Bel pulang adalah melodi paling indah. Bukan cuma karena sekolah selesai, tapi karena momen paling ditunggu saat pulang sekolah adalah pulang berdua bersamanya.')">
+                    <img src="BERSAMA2.png" alt="Foto Marsya 4">
+                </div>
+            </div>
+            <p class="title pink-text">I Love You! 💕</p>
+            <p style="font-size:12px; color:gray;">(Pencet fotonya deh!)</p>
+        </div>
+
+        <!-- Navigasi Bawah -->
+        <div class="nav-container">
+            <button id="prevBtn" onclick="prevSlide()" class="neo-button neo-button-secondary" style="display: none;">
+                ⬅️ Back
+            </button>
+            <button id="nextBtn" onclick="nextSlide()" class="neo-button">
+                Next ➡️
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ELEMEN POP-UP MODAL (Akan muncul saat foto di-klik) -->
+    <div id="photoModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeModal(event)">✖</button>
+            <img id="modalImagePreview" src="" alt="Detail Foto" class="modal-image">
+            <p id="modalTextPreview" class="modal-text">Teks penjelasan foto akan muncul di sini.</p>
+        </div>
+    </div>
+
+    <!-- Logic JavaScript -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+
+        function updateSlideDisplay() {
+            document.querySelectorAll('.slide').forEach((el, index) => {
+                if (index + 1 === currentSlide) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            document.getElementById('prevBtn').style.display = currentSlide === 1 ? 'none' : 'block';
+            document.getElementById('nextBtn').style.display = currentSlide === totalSlides ? 'none' : 'block';
+        }
+
+        function showError(inputId, msgId, message) {
+            const input = document.getElementById(inputId);
+            const msg = document.getElementById(msgId);
+            
+            input.classList.remove('error-shake'); 
+            void input.offsetWidth; 
+            input.classList.add('error-shake');
+            
+            msg.innerText = message;
+            msg.classList.add('show-error');
+        }
+
+        function hideError(inputId, msgId) {
+            document.getElementById(inputId).classList.remove('error-shake');
+            document.getElementById(msgId).classList.remove('show-error');
+        }
+
+        function nextSlide() {
+            if (currentSlide === 1) {
+                const nameVal = document.getElementById('nameInput').value.trim().toLowerCase();
+                if (nameVal !== 'marsya') {
+                    showError('nameInput', 'nameError', 'Eh salah! Kamu siapa hayo? 🧐 (Ketik: marsya)');
+                    return; 
+                } else {
+                    hideError('nameInput', 'nameError');
+                }
+            }
+            
+            if (currentSlide === 2) {
+                const dateVal = document.getElementById('dateInput').value;
+                if (dateVal !== '2009-10-30') {
+                    showError('dateInput', 'dateError', 'Tetoot! Salah tanggal wleee 😜 (Pilih: 30 Okt 2009)');
+                    return; 
+                } else {
+                    hideError('dateInput', 'dateError');
+                }
+            }
+
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideDisplay();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideDisplay();
+            }
+        }
+
+        document.getElementById('nameInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') nextSlide();
+        });
+        document.getElementById('dateInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') nextSlide();
+        });
+
+        // Swipe (Geser Layar)
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        document.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
+        document.addEventListener('touchend', e => { 
+            touchendX = e.changedTouches[0].screenX; 
+            if (touchendX < touchstartX - 50) nextSlide();
+            if (touchendX > touchstartX + 50) prevSlide();
+        });
+
+        // --- LOGIKA UNTUK POP-UP MODAL FOTO ---
+        function openModal(imageSrc, textDesc) {
+            const modal = document.getElementById('photoModal');
+            const modalImg = document.getElementById('modalImagePreview');
+            const modalTxt = document.getElementById('modalTextPreview');
+            
+            // Set sumber foto dan teks deskripsi
+            modalImg.src = imageSrc;
+            modalTxt.innerText = textDesc;
+            
+            // Tampilkan modal
+            modal.classList.add('show');
+        }
+
+        function closeModal(event) {
+            // Mencegah error jika fungsi dipanggil tanpa event
+            if(event) {
+                event.stopPropagation();
+            }
+            const modal = document.getElementById('photoModal');
+            modal.classList.remove('show');
+        }
+
+        updateSlideDisplay();
+    </script>
+</body>
+</html>
